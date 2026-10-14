@@ -1,0 +1,15 @@
+dist/
+node_modules/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.log
+*.zip
+*.tar.gz
+credentials*.json
+secrets*.json
+outputs/

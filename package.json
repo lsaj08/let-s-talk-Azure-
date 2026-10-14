@@ -1,0 +1,9 @@
+{
+  "name": "azure-arm-guard-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-artifact.mjs"
+  }
+}
