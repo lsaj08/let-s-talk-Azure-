@@ -1,5 +1,7 @@
 # Setup and operation
 
+This guide covers the hosted backend. For local Azure CLI integration with Codex or Claude Code, use [integrations/README.md](integrations/README.md). Local mode does not require an Entra application secret, Sites, or R2.
+
 ## Hosting
 
 Deploy the Worker through a private Sites project with the MCP capability, an R2 binding named `BUCKET`, and authenticated gateway access. The included hosting manifest is generic. Add your own hosting project binding through the platform; do not reuse another user's project ID. The gateway must strip or verify incoming `oai-authenticated-user-id` headers. A directly exposed Worker is unsafe.

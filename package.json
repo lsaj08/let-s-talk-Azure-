@@ -1,8 +1,13 @@
 {
-  "name": "azure-arm-guard-site",
+  "name": "lets-talk-azure",
+  "version": "0.2.0",
+  "description": "Azure ARM tools and skills for Codex and Claude Code, created by Leiner Arce (lsaj08)",
+  "author": "Leiner Arce (lsaj08)",
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "node --test scripts/*.test.mjs",
+    "mcp": "node local/server.mjs",
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs"
   }

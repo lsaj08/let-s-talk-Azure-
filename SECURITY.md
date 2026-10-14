@@ -1,5 +1,17 @@
 # Security boundary and observed evidence
 
+## Local Codex / Claude Code boundary
+
+The local stdio server trusts its operator-controlled startup arguments and installed Azure CLI executable. MCP tool arguments, template JSON, CLI JSON output, and Azure resource names are untrusted data. The model cannot select a subscription/group/type allowlist, executable, URL, or CLI command through a tool. Process startup binds the project scope. Each operation constructs a fixed CLI argument array; only inspection, validation, what-if, and existing deployment status are exposed. There is no local mutation, shell, token, login, or RBAC tool. This restriction is enforced by the tool dispatcher, not by MCP annotation hints.
+
+Validation and what-if send templates to Azure. They reuse the hosted template policy, including checks on parameter default values. Inputs are non-confidential JSON only, stored briefly in random temporary directories and removed in finally. POSIX file permissions are restricted; Windows inherits the current user's temporary-directory ACL. An unexpected process crash may leave temporary files. Do not supply confidential literals: field-name checks cannot identify every secret. Inventory outputs use explicit projections and a second field filter; what-if omits property values. Raw CLI stdout on failure and stderr are never returned. Stdout is reserved for bounded MCP JSON-RPC messages; execution has output and time limits.
+
+Azure CLI owns the credential cache, including refresh tokens. This project does not retrieve or persist tokens. Cache encryption depends on the platform; do not copy `.azure` into a project or repository. An operator, compromised CLI, process running as the same user, or a parent agent with independent shell access can bypass local tool restrictions. Optional subagents reduce shell access; prompt instructions are not a security sandbox. Do not grant the parent broader Azure permissions simply because the server has restricted tools.
+
+Local checks use simulated Azure JSON, real controlled child processes, and stdio handshake tests. Windows az.cmd arguments are quoted and expansion/operators are rejected; executable discovery trusts the operator's PATH. Timeouts attempt to terminate processes, but Windows batch process-tree termination is best effort and does not prove an Azure operation was canceled. Actual CLI sign-in, Azure provider/RBAC behavior, Unix runner behavior, and full Codex/Claude integration remain live acceptance gates. The local preview is resource-ID-only and predictive; it is not authorization to deploy. Changes require a distinct reviewed approval workflow outside this local tool surface.
+
+## Hosted boundary
+
 Sources considered attacker controlled: MCP arguments, ARM templates and parameters, OAuth query parameters, review IDs, browser forms and Azure polling URLs. ARM resource state and tool output are data, never instructions to grant access or approve changes.
 
 Flow: Sites authenticated identity -> per-user encrypted R2 record -> validated tenant/subscription configuration and per-user approved project group/types -> ARM request on fixed management.azure.com -> encrypted plan -> same-user private browser review -> origin/fetch-metadata and random nonce check -> digest and scope verification -> conditional R2 compare-and-swap -> single PUT to the saved deployment URI.

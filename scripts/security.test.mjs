@@ -4,6 +4,10 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 const mod=await import('data:text/javascript;base64,'+Buffer.from(await readFile('worker/guard.js','utf8')).toString('base64'));
 const {worker,policy,settings,safeChanges,seal,load,save,arm}=mod;
+test('parameter defaults cannot evaluate cross-scope ARM expressions',()=>{
+ const t=template();t.parameters={region:{type:'string',defaultValue:"[reference('/subscriptions/other/resource')]"}};
+ assert.throws(()=>policy(t,{},target(env())),/Only direct parameters/);
+});
 const origin='https://private.example';
 class Bucket {
   map=new Map();count=0;

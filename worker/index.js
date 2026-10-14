@@ -108,7 +108,9 @@ function policy(template, parameters, cfg) {
     if (!/^\d{4}-\d{2}-\d{2}(-preview)?$/.test(r.apiVersion||'')) fail('Use a literal API version');
     walk(r);
   }
-  walk(template.variables||{});
+  // Parameter defaults and other root fields are input too; never let them bypass policy.
+  const {resources:checkedResources,...rootFields}=template;
+  walk(rootFields);
   return {properties:{mode:'Incremental',template,parameters}};
 }
 function redact(v) {
