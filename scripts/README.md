@@ -13,3 +13,11 @@ These scripts use Node.js built-in modules and require no dependencies.
 - `build.sh`: shell entry point for the same build.mjs implementation.
 
 Run tests, build, and validate before publishing. Local passing tests do not establish successful real Azure authentication or deployment.
+
+```sh
+node --test scripts/*.test.mjs
+node scripts/build.mjs
+node scripts/validate-artifact.mjs
+```
+
+The Windows junction test may require permission outside a restricted filesystem sandbox. Use an authorized test environment; preserve the boundary check. For documentation-only edits, check Git whitespace and local Markdown links. The [verification record](../docs/VERIFICATION.md) captures the tested source baseline and remaining integration work; the [architecture](../docs/ARCHITECTURE.md) identifies authoritative and generated files.

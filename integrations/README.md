@@ -120,6 +120,22 @@ node --test scripts/local-mcp.test.mjs scripts/azure-cli.test.mjs scripts/instal
 
 These checks use controlled inputs and temporary files. They do not prove that your client connected, that Azure CLI is authenticated, that RBAC permits the requested operation, or that a live template can deploy. Verify those through the client after private sign-in. The hosted OAuth connection has its own pending integration checks in [SETUP.md](../SETUP.md).
 
+Record the client, configured scope, observed tool result, and any pending verification without recording tokens or confidential values. Use the [verification record](../docs/VERIFICATION.md) for the current baseline and live acceptance checklist.
+
+## Troubleshooting and upgrades
+
+| Symptom | Check |
+| --- | --- |
+| Skill appears but Azure tools are missing | MCP configuration is a separate step; check the client server list and restart the client. |
+| Node cannot be found | Set `command` to the absolute Node executable path available to that client. |
+| Azure CLI request fails | In your own terminal, verify CLI availability, sign-in, selected subscription, and RBAC. Raw errors are intentionally suppressed in MCP. |
+| Scope or allowed-type configuration is missing | Add the required startup options and restart the MCP client; these are not tool arguments. |
+| Template policy rejects an expression | Use the restricted inline JSON format in the skill workflow; arbitrary ARM functions and Bicep compilation are not supported by this server. |
+| Installer reports an existing destination | Review and update the installed skill/reference/agent manually; the installer never overwrites them. |
+| What-if times out | Inspect the situation privately before retrying. Timeout does not prove cancellation or successful completion. |
+
+Keep the repository clone at the path referenced by MCP. After pulling an update, review its changes, refresh the installed skill and agent files as needed, and restart the client. Pulling this repository does not update previously copied skill files or a separately deployed hosted Worker.
+
 ## Official configuration references
 
 - [Codex MCP configuration](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
